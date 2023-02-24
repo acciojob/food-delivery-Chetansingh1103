@@ -24,9 +24,9 @@ public class OrderEntity {
 	@Column(nullable = false)
 	private String[] items;
 
-	@ManyToOne
-	@JoinColumn(name = "userId")
-	private UserEntity userEntity;
+
+	@Column(nullable = false)
+	private String UserId;
 
 //	@OneToMany(mappedBy = "orderEntity",cascade = CascadeType.ALL)
 //	private List<String> foodEntityList = new ArrayList<>();
@@ -40,18 +40,18 @@ public class OrderEntity {
 		this.items = items;
 	}
 
-	public UserEntity getUserEntity() {
-		return userEntity;
-	}
-
-	public void setUserEntity(UserEntity userEntity) {
-		this.userEntity = userEntity;
-	}
-
 
 	@Column(nullable = false)
 	private boolean status;
 
+
+	public String getUserId() {
+		return UserId;
+	}
+
+	public void setUserId(String userId) {
+		UserId = userId;
+	}
 
 	public long getId() {
 		return id;

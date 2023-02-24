@@ -28,7 +28,7 @@ public class OrderServiceImpl implements OrderService {
         // creating the order and saving it in the repository
         OrderEntity orderEntity = new OrderEntity();
         orderEntity.setCost(orderDto.getCost());
-        orderEntity.setUserEntity(userRepository.findByUserId(orderDto.getUserId()));
+        orderEntity.setUserId(orderDto.getUserId());
         orderEntity.setItems(orderDto.getItems());
         orderEntity.setStatus(true);
 
@@ -59,7 +59,7 @@ public class OrderServiceImpl implements OrderService {
         // putting the values of order into orderDto and returning it
         OrderDto orderDto = new OrderDto();
         orderDto.setId(orderEntity.getId());
-        orderDto.setUserId(orderEntity.getUserEntity().getUserId());
+        orderDto.setUserId(orderEntity.getUserId());
         orderDto.setOrderId(orderEntity.getOrderId());
         orderDto.setCost(orderEntity.getCost());
         orderDto.setItems(orderEntity.getItems());
@@ -86,7 +86,7 @@ public class OrderServiceImpl implements OrderService {
         orderEntity = orderRepository.findByOrderId(orderId);
         orderDto.setOrderId(orderEntity.getOrderId());
         orderDto.setId(orderEntity.getId());
-        orderDto.setUserId(orderEntity.getUserEntity().getUserId());
+        orderDto.setUserId(orderEntity.getUserId());
 
         return orderDto;
     }
@@ -97,7 +97,7 @@ public class OrderServiceImpl implements OrderService {
         if(orderEntity == null){
             throw new Exception();
         }
-        UserEntity userEntity = orderEntity.getUserEntity();
+        UserEntity userEntity = userRepository.findByUserId(orderEntity.getUserId());
         userEntity.getOrderEntityList().remove(orderEntity);
         userRepository.save(userEntity);
         orderRepository.delete(orderEntity);
@@ -113,7 +113,7 @@ public class OrderServiceImpl implements OrderService {
 
             OrderDto orderDto = new OrderDto();
             orderDto.setId(orderEntity.getId());
-            orderDto.setUserId(orderEntity.getUserEntity().getUserId());
+            orderDto.setUserId(orderEntity.getUserId());
             orderDto.setOrderId(orderEntity.getOrderId());
             orderDto.setCost(orderEntity.getCost());
             orderDto.setItems(orderEntity.getItems());
