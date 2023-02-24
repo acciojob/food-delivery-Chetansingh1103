@@ -1,51 +1,129 @@
 package com.driver.ui.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.driver.model.request.UserDetailsRequestModel;
 import com.driver.model.response.OperationStatusModel;
+import com.driver.model.response.RequestOperationName;
+import com.driver.model.response.RequestOperationStatus;
 import com.driver.model.response.UserResponse;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.driver.service.impl.UserServiceImpl;
+import com.driver.shared.dto.UserDto;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/users")
 public class UserController {
 
-	@GetMapping(path = "/{id}")
-	public UserResponse getUser(@PathVariable String id) throws Exception{
+	@Autowired
+	UserServiceImpl userService;
 
-		return null;
+	@GetMapping("/getUser")
+	public UserResponse getUser(@RequestParam("userId") String userid) throws Exception{
+		UserDto userDto = userService.getUserByUserId(userid);
+
+		if(userDto == null){
+			throw  new Exception();
+		}
+
+		// converting userDto into UserResponse
+		UserResponse userResponse = new UserResponse();
+		userResponse.setUserId(userDto.getUserId());
+		userResponse.setEmail(userDto.getEmail());
+		userResponse.setFirstName(userDto.getFirstName());
+		userResponse.setLastName(userDto.getLastName());
+
+		return userResponse;
 	}
 
-	@PostMapping()
+	@PostMapping("/createUser")
 	public UserResponse createUser(@RequestBody UserDetailsRequestModel userDetails) throws Exception{
 
-		return null;
+		if(userDetails == null){
+			throw  new Exception("Please enter details correctly");
+		}
+
+		UserDto userDto = new UserDto();
+		userDto.setFirstName(userDetails.getFirstName());
+		userDto.setLastName(userDetails.getLastName());
+		userDto.setEmail(userDetails.getEmail());
+		userDto = userService.createUser(userDto);
+
+		// converting userDto into UserResponse
+		UserResponse userResponse = new UserResponse();
+		userResponse.setUserId(userDto.getUserId());
+		userResponse.setEmail(userDto.getEmail());
+		userResponse.setFirstName(userDto.getFirstName());
+		userResponse.setLastName(userDto.getLastName());
+
+		return userResponse;
 	}
 
 	@PutMapping(path = "/{id}")
 	public UserResponse updateUser(@PathVariable String id, @RequestBody UserDetailsRequestModel userDetails) throws Exception{
+		UserDto userDto = new UserDto();
+		userDto.setFirstName(userDetails.getFirstName());
+		userDto.setLastName(userDetails.getLastName());
+		userDto.setEmail(userDetails.getEmail());
 
-		return null;
+		try {
+			userDto = userService.updateUser(id,userDto);
+		}
+		catch (Exception e){
+			throw  new Exception("Please enter the correct userId");
+		}
+
+		// converting userDto into UserResponse if the id is correct
+		UserResponse userResponse = new UserResponse();
+		userResponse.setUserId(userDto.getUserId());
+		userResponse.setEmail(userDto.getEmail());
+		userResponse.setFirstName(userDto.getFirstName());
+		userResponse.setLastName(userDto.getLastName());
+
+		return userResponse;
 	}
 
 	@DeleteMapping(path = "/{id}")
 	public OperationStatusModel deleteUser(@PathVariable String id) throws Exception{
 
-		return null;
+		OperationStatusModel operationStatusModel = new OperationStatusModel();
+
+		try {
+			userService.getUserByUserId(id);
+		}
+		catch (Exception e){
+			operationStatusModel.setOperationName(String.valueOf(RequestOperationName.DELETE));
+			operationStatusModel.setOperationResult(String.valueOf(RequestOperationStatus.ERROR));
+			return operationStatusModel;
+		}
+
+		// if there is no exception then delete the user
+		userService.deleteUser(id);
+		operationStatusModel.setOperationName(String.valueOf(RequestOperationName.DELETE));
+		operationStatusModel.setOperationResult(String.valueOf(RequestOperationStatus.SUCCESS));
+
+		return operationStatusModel;
 	}
 	
-	@GetMapping()
+	@GetMapping("/getAllUsers")
 	public List<UserResponse> getUsers(){
+		List<UserResponse> userResponseList = new ArrayList<>();
+		List<UserDto> userDtoList = userService.getUsers();
 
-		return null;
+		for(UserDto userDto : userDtoList){
+
+			UserResponse userResponse = new UserResponse();
+			userResponse.setUserId(userDto.getUserId());
+			userResponse.setEmail(userDto.getEmail());
+			userResponse.setFirstName(userDto.getFirstName());
+			userResponse.setLastName(userDto.getLastName());
+
+			userResponseList.add(userResponse);
+		}
+
+		return userResponseList;
 	}
 	
 }

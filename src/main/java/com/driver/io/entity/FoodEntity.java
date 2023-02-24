@@ -1,20 +1,18 @@
 package com.driver.io.entity;
 
 import java.io.Serializable;
+import java.util.UUID;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity(name = "foods")
 public class FoodEntity{
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
-	
-	@Column(nullable = false)
-	private String foodId;
+
+	@Column(nullable = false,unique = true)
+	private String foodId = UUID.randomUUID().toString();
 	
 	@Column(nullable = false)
 	private String foodName;
@@ -24,6 +22,7 @@ public class FoodEntity{
 	
 	@Column(nullable = false)
 	private String foodCategory;
+
 
 	public long getId() {
 		return id;
