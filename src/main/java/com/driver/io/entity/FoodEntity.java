@@ -11,7 +11,7 @@ public class FoodEntity{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
-	@Column(nullable = false,unique = true)
+	@Column(nullable = false)
 	private String foodId = UUID.randomUUID().toString();
 	
 	@Column(nullable = false)

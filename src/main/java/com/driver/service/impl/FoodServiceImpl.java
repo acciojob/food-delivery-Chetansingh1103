@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class FoodServiceImpl implements FoodService {
@@ -22,9 +23,9 @@ public class FoodServiceImpl implements FoodService {
         foodEntity.setFoodName(foodDto.getFoodName());
         foodEntity.setFoodCategory(foodDto.getFoodCategory());
         foodEntity.setFoodPrice(foodDto.getFoodPrice());
+
         foodRepository.save(foodEntity);
 
-        foodEntity = foodRepository.findByFoodName(foodDto.getFoodName());
         foodDto.setFoodId(foodEntity.getFoodId());
         foodDto.setId(foodEntity.getId());
 
@@ -33,6 +34,10 @@ public class FoodServiceImpl implements FoodService {
 
     @Override
     public FoodDto getFoodById(String foodId) throws Exception {
+        if(Objects.equals(foodId, "")){
+            throw new Exception();
+        }
+
         FoodEntity foodEntity = foodRepository.findByFoodId(foodId);
 
         if(foodEntity == null){
@@ -51,6 +56,11 @@ public class FoodServiceImpl implements FoodService {
 
     @Override
     public FoodDto updateFoodDetails(String foodId, FoodDto foodDetails) throws Exception {
+
+        if(foodDetails == null || foodId.equals("")){
+            throw new Exception();
+        }
+
         FoodEntity foodEntity = foodRepository.findByFoodId(foodId);
 
         if(foodEntity == null){
@@ -78,6 +88,10 @@ public class FoodServiceImpl implements FoodService {
 
     @Override
     public void deleteFoodItem(String foodId) throws Exception {
+        if(foodId.equals("")){
+            throw new Exception();
+        }
+
         FoodEntity foodEntity = foodRepository.findByFoodId(foodId);
 
         if(foodEntity == null){
@@ -89,7 +103,8 @@ public class FoodServiceImpl implements FoodService {
 
     @Override
     public List<FoodDto> getFoods() {
-        List<FoodEntity> foodEntityList = foodRepository.findAllFoods();
+        List<FoodEntity> foodEntityList = (List<FoodEntity>) foodRepository.findAll();
+
         List<FoodDto> foodDtoList = new ArrayList<>();
 
         for(FoodEntity foodEntity : foodEntityList){

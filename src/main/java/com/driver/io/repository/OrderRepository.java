@@ -11,6 +11,5 @@ import java.util.List;
 public interface OrderRepository extends CrudRepository<OrderEntity, Long> {
 	OrderEntity findByOrderId(String orderId);
 
-	@Query(value = "select * from orders",nativeQuery = true)
-	List<OrderEntity> findAllOrders();
+
 }

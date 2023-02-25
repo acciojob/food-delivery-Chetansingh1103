@@ -26,7 +26,6 @@ public class UserServiceImpl implements UserService {
         userRepository.save(userEntity);
 
         // again extracting the user details from db to get the id and userId details too
-        userEntity = userRepository.findByEmail(userDto.getEmail());
         userDto.setUserId(userEntity.getUserId());
         userDto.setId(userEntity.getId());
         return userDto;
@@ -34,6 +33,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto getUser(String email) throws Exception {
+
+        if(email.equals("")){
+            throw new Exception();
+        }
 
         UserEntity userEntity = userRepository.findByEmail(email);
 
@@ -53,6 +56,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto getUserByUserId(String userId) throws Exception {
+
+        if(userId.equals("")){
+            throw new Exception();
+        }
+
         UserEntity userEntity = userRepository.findByUserId(userId);
 
         if(userEntity == null){
@@ -107,7 +115,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> getUsers() {
-        List<UserEntity> userEntityList = userRepository.findAllUsers();
+        List<UserEntity> userEntityList = (List<UserEntity>) userRepository.findAll();
         List<UserDto> userDtoList= new ArrayList<>();
 
         for (UserEntity userEntity : userEntityList) {

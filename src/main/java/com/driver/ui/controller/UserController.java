@@ -22,28 +22,17 @@ public class UserController {
 
 	@GetMapping("/getUser")
 	public UserResponse getUser(@RequestParam("userId") String userid) throws Exception{
-		UserDto userDto = userService.getUserByUserId(userid);
-
-		if(userDto == null){
-			throw  new Exception();
-		}
-
-		// converting userDto into UserResponse
-		UserResponse userResponse = new UserResponse();
-		userResponse.setUserId(userDto.getUserId());
-		userResponse.setEmail(userDto.getEmail());
-		userResponse.setFirstName(userDto.getFirstName());
-		userResponse.setLastName(userDto.getLastName());
-
-		return userResponse;
+			UserDto userDto = userService.getUserByUserId(userid);
+			UserResponse userResponse = new UserResponse();
+			userResponse.setUserId(userDto.getUserId());
+			userResponse.setEmail(userDto.getEmail());
+			userResponse.setFirstName(userDto.getFirstName());
+			userResponse.setLastName(userDto.getLastName());
+			return userResponse;
 	}
 
 	@PostMapping("/createUser")
 	public UserResponse createUser(@RequestBody UserDetailsRequestModel userDetails) throws Exception{
-
-		if(userDetails == null){
-			throw  new Exception("Please enter details correctly");
-		}
 
 		UserDto userDto = new UserDto();
 		userDto.setFirstName(userDetails.getFirstName());
@@ -68,12 +57,8 @@ public class UserController {
 		userDto.setLastName(userDetails.getLastName());
 		userDto.setEmail(userDetails.getEmail());
 
-		try {
-			userDto = userService.updateUser(id,userDto);
-		}
-		catch (Exception e){
-			throw  new Exception("Please enter the correct userId");
-		}
+		userDto = userService.updateUser(id,userDto);
+
 
 		// converting userDto into UserResponse if the id is correct
 		UserResponse userResponse = new UserResponse();

@@ -14,8 +14,7 @@ public class OrderEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
-
-	@Column(nullable = false,unique = true)
+	@Column(nullable = false)
 	private String orderId = UUID.randomUUID().toString();
 
 	@Column(nullable = false)
@@ -27,9 +26,6 @@ public class OrderEntity {
 
 	@Column(nullable = false)
 	private String UserId;
-
-//	@OneToMany(mappedBy = "orderEntity",cascade = CascadeType.ALL)
-//	private List<String> foodEntityList = new ArrayList<>();
 
 
 	public String[] getItems() {

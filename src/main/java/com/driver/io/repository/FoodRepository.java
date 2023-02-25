@@ -12,9 +12,5 @@ import java.util.List;
 public interface FoodRepository extends CrudRepository<FoodEntity, Long> {
 	FoodEntity findByFoodId(String foodId);
 
-	@Query(value = "select * from foods f where f.food_name=:name",nativeQuery = true)
-	FoodEntity findByFoodName(String name);
 
-	@Query(value = "select * from foods",nativeQuery = true)
-	List<FoodEntity> findAllFoods();
 }

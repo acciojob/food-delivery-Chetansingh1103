@@ -16,7 +16,7 @@ public class UserEntity{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
-	@Column(nullable = false,unique = true)
+	@Column(nullable = false)
 	private String userId = UUID.randomUUID().toString();
 
 	@Column(nullable = false, length = 20)
@@ -28,16 +28,6 @@ public class UserEntity{
 	@Column(nullable = false, length = 120, unique = true)
 	private String email;
 
-	@OneToMany(mappedBy = "userEntity",cascade = CascadeType.ALL)
-	private List<OrderEntity> orderEntityList = new ArrayList<>();
-
-	public List<OrderEntity> getOrderEntityList() {
-		return orderEntityList;
-	}
-
-	public void setOrderEntityList(List<OrderEntity> orderEntityList) {
-		this.orderEntityList = orderEntityList;
-	}
 
 	public long getId() {
 		return id;
