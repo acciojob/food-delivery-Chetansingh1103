@@ -33,25 +33,30 @@ public class FoodServiceImpl implements FoodService {
             return foodDto;
         }
        catch (Exception e){
-            throw new RuntimeException();
+            throw new NullPointerException();
        }
     }
 
     @Override
     public FoodDto getFoodById(String foodId) throws Exception {
 
+        try {
+            FoodEntity foodEntity = foodRepository.findByFoodId(foodId);
 
-        FoodEntity foodEntity = foodRepository.findByFoodId(foodId);
 
+            FoodDto foodDto = new FoodDto();
+            foodDto.setId(foodEntity.getId());
+            foodDto.setFoodCategory(foodEntity.getFoodCategory());
+            foodDto.setFoodName(foodEntity.getFoodName());
+            foodDto.setFoodPrice(foodEntity.getFoodPrice());
+            foodDto.setFoodId(foodEntity.getFoodId());
 
-        FoodDto foodDto = new FoodDto();
-        foodDto.setId(foodEntity.getId());
-        foodDto.setFoodCategory(foodEntity.getFoodCategory());
-        foodDto.setFoodName(foodEntity.getFoodName());
-        foodDto.setFoodPrice(foodEntity.getFoodPrice());
-        foodDto.setFoodId(foodEntity.getFoodId());
+            return foodDto;
+        }
+        catch (Exception e){
+            throw new NullPointerException();
+        }
 
-        return foodDto;
     }
 
     @Override
@@ -79,7 +84,7 @@ public class FoodServiceImpl implements FoodService {
             return foodDto;
         }
        catch (Exception e){
-            throw new Exception();
+            throw new NullPointerException();
        }
     }
 
@@ -92,7 +97,7 @@ public class FoodServiceImpl implements FoodService {
             foodRepository.delete(foodEntity);
         }
         catch (Exception e){
-            throw new Exception();
+            throw new NullPointerException();
         }
     }
 

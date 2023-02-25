@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService {
             return userDto;
         }
        catch (Exception e){
-            throw new Exception();
+            throw new NullPointerException();
        }
     }
 
@@ -71,7 +71,7 @@ public class UserServiceImpl implements UserService {
            return userDto;
        }
        catch (Exception e){
-           throw new Exception();
+           throw new NullPointerException();
        }
 
     }
@@ -98,7 +98,7 @@ public class UserServiceImpl implements UserService {
             return userDto;
         }
        catch (Exception e){
-            throw new Exception();
+            throw new NullPointerException();
        }
     }
 
@@ -111,7 +111,7 @@ public class UserServiceImpl implements UserService {
             userRepository.delete(userEntity);
         }
        catch (Exception e){
-            throw new Exception();
+            throw new NullPointerException();
        }
     }
 

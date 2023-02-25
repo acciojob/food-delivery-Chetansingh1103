@@ -40,7 +40,7 @@ public class OrderServiceImpl implements OrderService {
             return orderDto;
         }
         catch (Exception e){
-            throw new RuntimeException();
+            throw new NullPointerException();
         }
 
     }
@@ -63,7 +63,7 @@ public class OrderServiceImpl implements OrderService {
             return orderDto;
         }
        catch (Exception e){
-            throw new Exception();
+            throw new NullPointerException();
        }
     }
 
@@ -87,7 +87,7 @@ public class OrderServiceImpl implements OrderService {
             return orderDto;
         }
        catch (Exception e){
-            throw new Exception();
+            throw new NullPointerException();
        }
     }
 
@@ -100,7 +100,7 @@ public class OrderServiceImpl implements OrderService {
             orderRepository.delete(orderEntity);
         }
         catch (Exception e){
-            throw new Exception();
+            throw new NullPointerException();
         }
     }
 
