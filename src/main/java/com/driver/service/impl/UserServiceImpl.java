@@ -16,101 +16,103 @@ public class UserServiceImpl implements UserService {
     UserRepository userRepository;
     @Override
     public UserDto createUser(UserDto userDto) throws Exception {
-        if(userDto == null) {
-            throw new Exception();
-        }
-        UserEntity userEntity= new UserEntity();
-        userEntity.setFirstName(userDto.getFirstName());
-        userEntity.setLastName(userDto.getLastName());
-        userEntity.setEmail(userDto.getEmail());
-        userRepository.save(userEntity);
+       try {
+           UserEntity userEntity= new UserEntity();
+           userEntity.setFirstName(userDto.getFirstName());
+           userEntity.setLastName(userDto.getLastName());
+           userEntity.setEmail(userDto.getEmail());
+           userRepository.save(userEntity);
 
-        // again extracting the user details from db to get the id and userId details too
-        userDto.setUserId(userEntity.getUserId());
-        userDto.setId(userEntity.getId());
-        return userDto;
+           // again extracting the user details from db to get the id and userId details too
+           userDto.setUserId(userEntity.getUserId());
+           userDto.setId(userEntity.getId());
+           return userDto;
+       }
+        catch (Exception e){
+           throw new Exception();
+        }
     }
 
     @Override
     public UserDto getUser(String email) throws Exception {
+        try {
+            UserEntity userEntity = userRepository.findByEmail(email);
 
-        if(email.equals("")){
+
+
+            UserDto userDto = new UserDto();
+            userDto.setId(userEntity.getId());
+            userDto.setEmail(userEntity.getEmail());
+            userDto.setLastName(userEntity.getLastName());
+            userDto.setFirstName(userEntity.getFirstName());
+            userDto.setUserId(userEntity.getUserId());
+
+            return userDto;
+        }
+       catch (Exception e){
             throw new Exception();
-        }
-
-        UserEntity userEntity = userRepository.findByEmail(email);
-
-        if(userEntity == null){
-            throw  new Exception("Please enter the correct email");
-        }
-
-        UserDto userDto = new UserDto();
-        userDto.setId(userEntity.getId());
-        userDto.setEmail(userEntity.getEmail());
-        userDto.setLastName(userEntity.getLastName());
-        userDto.setFirstName(userEntity.getFirstName());
-        userDto.setUserId(userEntity.getUserId());
-
-        return userDto;
+       }
     }
 
     @Override
-    public UserDto getUserById(String userId) throws Exception {
+    public UserDto getUserByUserId(String userId) throws Exception {
 
-        if(userId.equals("")){
-            throw new Exception();
-        }
+       try {
+           UserEntity userEntity = userRepository.findByUserId(userId);
 
-        UserEntity userEntity = userRepository.findByUserId(userId);
+           // setting the userDto values to return it
+           UserDto userDto = new UserDto();
+           userDto.setId(userEntity.getId());
+           userDto.setEmail(userEntity.getEmail());
+           userDto.setLastName(userEntity.getLastName());
+           userDto.setFirstName(userEntity.getFirstName());
+           userDto.setUserId(userEntity.getUserId());
 
-        if(userEntity == null){
-            throw new Exception();
-        }
+           return userDto;
+       }
+       catch (Exception e){
+           throw new Exception();
+       }
 
-        // setting the userDto values to return it
-        UserDto userDto = new UserDto();
-        userDto.setId(userEntity.getId());
-        userDto.setEmail(userEntity.getEmail());
-        userDto.setLastName(userEntity.getLastName());
-        userDto.setFirstName(userEntity.getFirstName());
-        userDto.setUserId(userEntity.getUserId());
-
-        return userDto;
     }
 
     @Override
     public UserDto updateUser(String userId, UserDto userDto) throws Exception {
-        UserEntity userEntity = userRepository.findByUserId(userId);
+        try {
+            UserEntity userEntity = userRepository.findByUserId(userId);
 
-        if(userEntity == null){
-            throw  new Exception("Please enter the correct userId");
+
+            userEntity.setFirstName(userDto.getFirstName());
+            userEntity.setLastName(userDto.getLastName());
+            userEntity.setEmail(userDto.getEmail());
+
+            userRepository.save(userEntity);
+
+            // setting the userDto values again to return it
+            userDto.setId(userEntity.getId());
+            userDto.setEmail(userEntity.getEmail());
+            userDto.setLastName(userEntity.getLastName());
+            userDto.setFirstName(userEntity.getFirstName());
+            userDto.setUserId(userEntity.getUserId());
+
+            return userDto;
         }
-
-        userEntity.setFirstName(userDto.getFirstName());
-        userEntity.setLastName(userDto.getLastName());
-        userEntity.setEmail(userDto.getEmail());
-
-        userRepository.save(userEntity);
-
-        // setting the userDto values again to return it
-        userDto.setId(userEntity.getId());
-        userDto.setEmail(userEntity.getEmail());
-        userDto.setLastName(userEntity.getLastName());
-        userDto.setFirstName(userEntity.getFirstName());
-        userDto.setUserId(userEntity.getUserId());
-
-        return userDto;
+       catch (Exception e){
+            throw new Exception();
+       }
     }
 
     @Override
     public void deleteUser(String userId) throws Exception {
-        UserEntity userEntity = userRepository.findByUserId(userId);
+        try {
+            UserEntity userEntity = userRepository.findByUserId(userId);
 
-        if(userEntity == null){
-            throw  new Exception("Please enter the correct userId");
+
+            userRepository.delete(userEntity);
         }
-
-        userRepository.delete(userEntity);
+       catch (Exception e){
+            throw new Exception();
+       }
     }
 
     @Override

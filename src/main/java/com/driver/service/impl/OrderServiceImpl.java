@@ -23,89 +23,85 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDto createOrder(OrderDto orderDto) {
+        try {
+            OrderEntity orderEntity = new OrderEntity();
+            orderEntity.setCost(orderDto.getCost());
+            orderEntity.setUserId(orderDto.getUserId());
+            orderEntity.setItems(orderDto.getItems());
+            orderEntity.setStatus(true);
 
-        // creating the order and saving it in the repository
-        OrderEntity orderEntity = new OrderEntity();
-        orderEntity.setCost(orderDto.getCost());
-        orderEntity.setUserId(orderDto.getUserId());
-        orderEntity.setItems(orderDto.getItems());
-        orderEntity.setStatus(true);
+            orderRepository.save(orderEntity);
 
-        orderRepository.save(orderEntity);
+            // setting the orderDto to return it
+            orderDto.setOrderId(orderEntity.getOrderId());
+            orderDto.setId(orderEntity.getId());
+            orderDto.setStatus(orderEntity.isStatus());
 
-        // setting the orderDto to return it
-        orderDto.setOrderId(orderEntity.getOrderId());
-        orderDto.setId(orderEntity.getId());
-        orderDto.setStatus(orderEntity.isStatus());
+            return orderDto;
+        }
+        catch (Exception e){
+            throw new RuntimeException();
+        }
 
-        return orderDto;
     }
 
     @Override
     public OrderDto getOrderById(String orderId) throws Exception {
 
-        if(orderId.equals("")){
-            throw new Exception();
+        try {
+            OrderEntity orderEntity = orderRepository.findByOrderId(orderId);
+
+            // putting the values of order into orderDto and returning it
+            OrderDto orderDto = new OrderDto();
+            orderDto.setId(orderEntity.getId());
+            orderDto.setUserId(orderEntity.getUserId());
+            orderDto.setOrderId(orderEntity.getOrderId());
+            orderDto.setCost(orderEntity.getCost());
+            orderDto.setItems(orderEntity.getItems());
+            orderDto.setStatus(orderEntity.isStatus());
+
+            return orderDto;
         }
-
-        OrderEntity orderEntity = orderRepository.findByOrderId(orderId);
-
-        if(orderEntity == null){
+       catch (Exception e){
             throw new Exception();
-        }
-
-        // putting the values of order into orderDto and returning it
-        OrderDto orderDto = new OrderDto();
-        orderDto.setId(orderEntity.getId());
-        orderDto.setUserId(orderEntity.getUserId());
-        orderDto.setOrderId(orderEntity.getOrderId());
-        orderDto.setCost(orderEntity.getCost());
-        orderDto.setItems(orderEntity.getItems());
-        orderDto.setStatus(orderEntity.isStatus());
-
-        return orderDto;
+       }
     }
 
     @Override
     public OrderDto updateOrderDetails(String orderId, OrderDto orderDto) throws Exception {
 
-        if(orderId.equals("") || orderDto == null){
-            throw new Exception();
+        try {
+            OrderEntity orderEntity = orderRepository.findByOrderId(orderId);
+
+            orderEntity.setItems(orderDto.getItems());
+            orderEntity.setCost(orderDto.getCost());
+            orderEntity.setStatus(true);
+
+            orderRepository.save(orderEntity);
+
+            // extracting the order details from the repository to get updated details
+            orderDto.setOrderId(orderEntity.getOrderId());
+            orderDto.setId(orderEntity.getId());
+            orderDto.setUserId(orderEntity.getUserId());
+
+            return orderDto;
         }
-
-        OrderEntity orderEntity = orderRepository.findByOrderId(orderId);
-
-        if(orderEntity == null){
+       catch (Exception e){
             throw new Exception();
-        }
-
-        orderEntity.setItems(orderDto.getItems());
-        orderEntity.setCost(orderDto.getCost());
-        orderEntity.setStatus(true);
-
-        orderRepository.save(orderEntity);
-
-        // extracting the order details from the repository to get updated details
-        orderDto.setOrderId(orderEntity.getOrderId());
-        orderDto.setId(orderEntity.getId());
-        orderDto.setUserId(orderEntity.getUserId());
-
-        return orderDto;
+       }
     }
 
     @Override
     public void deleteOrder(String orderId) throws Exception {
-        if(orderId.equals("")){
+        try {
+            OrderEntity orderEntity = orderRepository.findByOrderId(orderId);
+
+
+            orderRepository.delete(orderEntity);
+        }
+        catch (Exception e){
             throw new Exception();
         }
-
-        OrderEntity orderEntity = orderRepository.findByOrderId(orderId);
-
-        if(orderEntity == null){
-            throw new Exception();
-        }
-
-        orderRepository.delete(orderEntity);
     }
 
     @Override

@@ -19,17 +19,22 @@ public class FoodServiceImpl implements FoodService {
 
     @Override
     public FoodDto createFood(FoodDto foodDto) {
-        FoodEntity foodEntity = new FoodEntity();
-        foodEntity.setFoodName(foodDto.getFoodName());
-        foodEntity.setFoodCategory(foodDto.getFoodCategory());
-        foodEntity.setFoodPrice(foodDto.getFoodPrice());
+        try {
+            FoodEntity foodEntity = new FoodEntity();
+            foodEntity.setFoodName(foodDto.getFoodName());
+            foodEntity.setFoodCategory(foodDto.getFoodCategory());
+            foodEntity.setFoodPrice(foodDto.getFoodPrice());
 
-        foodRepository.save(foodEntity);
+            foodRepository.save(foodEntity);
 
-        foodDto.setFoodId(foodEntity.getFoodId());
-        foodDto.setId(foodEntity.getId());
+            foodDto.setFoodId(foodEntity.getFoodId());
+            foodDto.setId(foodEntity.getId());
 
-        return foodDto;
+            return foodDto;
+        }
+       catch (Exception e){
+            throw new RuntimeException();
+       }
     }
 
     @Override
@@ -57,33 +62,30 @@ public class FoodServiceImpl implements FoodService {
     @Override
     public FoodDto updateFoodDetails(String foodId, FoodDto foodDetails) throws Exception {
 
-        if(foodDetails == null || foodId.equals("")){
-            throw new Exception();
+        try {
+            FoodEntity foodEntity = foodRepository.findByFoodId(foodId);
+
+            foodEntity.setFoodPrice(foodDetails.getFoodPrice());
+            foodEntity.setFoodCategory(foodDetails.getFoodCategory());
+            foodEntity.setFoodName(foodDetails.getFoodName());
+
+            foodRepository.save(foodEntity);
+
+            foodEntity = foodRepository.findByFoodId(foodId);
+
+            // creating dto and returning
+            FoodDto foodDto = new FoodDto();
+            foodDto.setId(foodEntity.getId());
+            foodDto.setFoodCategory(foodEntity.getFoodCategory());
+            foodDto.setFoodName(foodEntity.getFoodName());
+            foodDto.setFoodPrice(foodEntity.getFoodPrice());
+            foodDto.setFoodId(foodEntity.getFoodId());
+
+            return foodDto;
         }
-
-        FoodEntity foodEntity = foodRepository.findByFoodId(foodId);
-
-        if(foodEntity == null){
+       catch (Exception e){
             throw new Exception();
-        }
-
-        foodEntity.setFoodPrice(foodDetails.getFoodPrice());
-        foodEntity.setFoodCategory(foodDetails.getFoodCategory());
-        foodEntity.setFoodName(foodDetails.getFoodName());
-
-        foodRepository.save(foodEntity);
-
-        foodEntity = foodRepository.findByFoodId(foodId);
-
-        // creating dto and returning
-        FoodDto foodDto = new FoodDto();
-        foodDto.setId(foodEntity.getId());
-        foodDto.setFoodCategory(foodEntity.getFoodCategory());
-        foodDto.setFoodName(foodEntity.getFoodName());
-        foodDto.setFoodPrice(foodEntity.getFoodPrice());
-        foodDto.setFoodId(foodEntity.getFoodId());
-
-        return foodDto;
+       }
     }
 
     @Override
