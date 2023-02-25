@@ -19,7 +19,7 @@ public class FoodServiceImpl implements FoodService {
 
     @Override
     public FoodDto createFood(FoodDto foodDto) {
-        try {
+
             FoodEntity foodEntity = new FoodEntity();
             foodEntity.setFoodName(foodDto.getFoodName());
             foodEntity.setFoodCategory(foodDto.getFoodCategory());
@@ -31,16 +31,14 @@ public class FoodServiceImpl implements FoodService {
             foodDto.setId(foodEntity.getId());
 
             return foodDto;
-        }
-       catch (Exception e){
-            throw new NullPointerException();
-       }
     }
 
     @Override
-    public FoodDto getFoodById(String foodId) throws Exception {
+    public FoodDto getFoodById(String foodId) throws NullPointerException {
 
-        try {
+        if(foodRepository.findByFoodId(foodId) == null){
+            throw new NullPointerException();
+        }
             FoodEntity foodEntity = foodRepository.findByFoodId(foodId);
 
 
@@ -52,17 +50,16 @@ public class FoodServiceImpl implements FoodService {
             foodDto.setFoodId(foodEntity.getFoodId());
 
             return foodDto;
-        }
-        catch (Exception e){
-            throw new NullPointerException();
-        }
+
 
     }
 
     @Override
-    public FoodDto updateFoodDetails(String foodId, FoodDto foodDetails) throws Exception {
+    public FoodDto updateFoodDetails(String foodId, FoodDto foodDetails) throws NullPointerException {
 
-        try {
+        if(foodRepository.findByFoodId(foodId) == null){
+            throw new NullPointerException();
+        }
             FoodEntity foodEntity = foodRepository.findByFoodId(foodId);
 
             foodEntity.setFoodPrice(foodDetails.getFoodPrice());
@@ -71,7 +68,6 @@ public class FoodServiceImpl implements FoodService {
 
             foodRepository.save(foodEntity);
 
-            foodEntity = foodRepository.findByFoodId(foodId);
 
             // creating dto and returning
             FoodDto foodDto = new FoodDto();
@@ -83,22 +79,17 @@ public class FoodServiceImpl implements FoodService {
 
             return foodDto;
         }
-       catch (Exception e){
-            throw new NullPointerException();
-       }
-    }
 
     @Override
-    public void deleteFoodItem(String foodId) throws Exception {
-        try {
+    public void deleteFoodItem(String foodId) throws NullPointerException {
+        if(foodRepository.findByFoodId(foodId) == null){
+            throw new NullPointerException();
+        }
             FoodEntity foodEntity = foodRepository.findByFoodId(foodId);
 
 
             foodRepository.delete(foodEntity);
-        }
-        catch (Exception e){
-            throw new NullPointerException();
-        }
+
     }
 
     @Override

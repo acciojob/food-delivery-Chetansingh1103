@@ -28,7 +28,7 @@ public class FoodController {
 	FoodServiceImpl foodService;
 
 	@GetMapping(path="/{id}")
-	public FoodDetailsResponse getFood(@PathVariable String id) throws Exception{
+	public FoodDetailsResponse getFood(@PathVariable String id){
 		try {
 			FoodDto foodDto = foodService.getFoodById(id);
 
@@ -41,14 +41,13 @@ public class FoodController {
 			return foodDetailsResponse;
 		}
 		catch (Exception e){
-			throw new NullPointerException();
+			return new FoodDetailsResponse();
 		}
 	}
 
 	@PostMapping("/createFood")
 	public FoodDetailsResponse createFood(@RequestBody FoodDetailsRequestModel foodDetails) {
 
-		try {
 			FoodDto foodDto = new FoodDto();
 			foodDto.setFoodName(foodDetails.getFoodName());
 			foodDto.setFoodPrice(foodDetails.getFoodPrice());
@@ -63,15 +62,12 @@ public class FoodController {
 			foodDetailsResponse.setFoodPrice(foodDto.getFoodPrice());
 
 			return foodDetailsResponse;
-		}
-		catch (Exception e){
-			throw new RuntimeException();
-		}
+
 
 	}
 
 	@PutMapping(path="/{id}")
-	public FoodDetailsResponse updateFood(@PathVariable String id, @RequestBody FoodDetailsRequestModel foodDetails) throws Exception{
+	public FoodDetailsResponse updateFood(@PathVariable String id, @RequestBody FoodDetailsRequestModel foodDetails){
 
 		try {
 			FoodDto foodDto = new FoodDto();
@@ -90,15 +86,15 @@ public class FoodController {
 			return foodDetailsResponse;
 		}
 		catch (Exception e){
-			throw new NullPointerException();
+			return new FoodDetailsResponse();
 		}
 	}
 
 	@DeleteMapping(path = "/{id}")
-	public OperationStatusModel deleteFood(@PathVariable String id) throws Exception{
-		OperationStatusModel operationStatusModel = new OperationStatusModel();
+	public OperationStatusModel deleteFood(@PathVariable String id){
+
 		try {
-			foodService.getFoodById(id);
+			OperationStatusModel operationStatusModel = new OperationStatusModel();
 			foodService.deleteFoodItem(id);
 			operationStatusModel.setOperationResult(String.valueOf(RequestOperationStatus.SUCCESS));
 			operationStatusModel.setOperationName(String.valueOf(RequestOperationName.DELETE));
@@ -106,9 +102,10 @@ public class FoodController {
 			return operationStatusModel;
 		}
 		catch (Exception e){
+			OperationStatusModel operationStatusModel = new OperationStatusModel();
 			operationStatusModel.setOperationResult(String.valueOf(RequestOperationStatus.ERROR));
 			operationStatusModel.setOperationName(String.valueOf(RequestOperationName.DELETE));
-			throw new NullPointerException();
+			return operationStatusModel;
 		}
 	}
 	

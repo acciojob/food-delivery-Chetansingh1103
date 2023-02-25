@@ -15,8 +15,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     UserRepository userRepository;
     @Override
-    public UserDto createUser(UserDto userDto) throws Exception {
-       try {
+    public UserDto createUser(UserDto userDto) {
+
            UserEntity userEntity= new UserEntity();
            userEntity.setFirstName(userDto.getFirstName());
            userEntity.setLastName(userDto.getLastName());
@@ -27,18 +27,16 @@ public class UserServiceImpl implements UserService {
            userDto.setUserId(userEntity.getUserId());
            userDto.setId(userEntity.getId());
            return userDto;
-       }
-        catch (Exception e){
-           throw new Exception();
-        }
+
     }
 
     @Override
-    public UserDto getUser(String email) throws Exception {
-        try {
+    public UserDto getUser(String email) throws NullPointerException {
+
+        if(userRepository.findByEmail(email) == null){
+            throw new NullPointerException();
+        }
             UserEntity userEntity = userRepository.findByEmail(email);
-
-
 
             UserDto userDto = new UserDto();
             userDto.setId(userEntity.getId());
@@ -48,16 +46,16 @@ public class UserServiceImpl implements UserService {
             userDto.setUserId(userEntity.getUserId());
 
             return userDto;
-        }
-       catch (Exception e){
-            throw new NullPointerException();
-       }
+
+
     }
 
     @Override
     public UserDto getUserByUserId(String userId) throws Exception {
 
-       try {
+        if(userRepository.findByUserId(userId) == null){
+            throw new NullPointerException();
+        }
            UserEntity userEntity = userRepository.findByUserId(userId);
 
            // setting the userDto values to return it
@@ -69,16 +67,15 @@ public class UserServiceImpl implements UserService {
            userDto.setUserId(userEntity.getUserId());
 
            return userDto;
-       }
-       catch (Exception e){
-           throw new NullPointerException();
-       }
 
     }
 
     @Override
     public UserDto updateUser(String userId, UserDto userDto) throws Exception {
-        try {
+
+        if(userRepository.findByUserId(userId) == null){
+            throw new NullPointerException();
+        }
             UserEntity userEntity = userRepository.findByUserId(userId);
 
 
@@ -96,23 +93,21 @@ public class UserServiceImpl implements UserService {
             userDto.setUserId(userEntity.getUserId());
 
             return userDto;
-        }
-       catch (Exception e){
-            throw new NullPointerException();
-       }
+
     }
 
     @Override
     public void deleteUser(String userId) throws Exception {
-        try {
+
+        if(userRepository.findByUserId(userId) == null){
+            throw new NullPointerException();
+        }
+
             UserEntity userEntity = userRepository.findByUserId(userId);
 
 
             userRepository.delete(userEntity);
-        }
-       catch (Exception e){
-            throw new NullPointerException();
-       }
+
     }
 
     @Override

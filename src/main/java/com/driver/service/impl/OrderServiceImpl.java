@@ -22,8 +22,8 @@ public class OrderServiceImpl implements OrderService {
 
 
     @Override
-    public OrderDto createOrder(OrderDto orderDto) {
-        try {
+    public OrderDto createOrder(OrderDto orderDto)  {
+
             OrderEntity orderEntity = new OrderEntity();
             orderEntity.setCost(orderDto.getCost());
             orderEntity.setUserId(orderDto.getUserId());
@@ -38,17 +38,14 @@ public class OrderServiceImpl implements OrderService {
             orderDto.setStatus(orderEntity.isStatus());
 
             return orderDto;
-        }
-        catch (Exception e){
-            throw new NullPointerException();
-        }
-
     }
 
     @Override
-    public OrderDto getOrderById(String orderId) throws Exception {
+    public OrderDto getOrderById(String orderId) throws NullPointerException {
 
-        try {
+        if(orderRepository.findByOrderId(orderId) == null){
+            throw new NullPointerException();
+        }
             OrderEntity orderEntity = orderRepository.findByOrderId(orderId);
 
             // putting the values of order into orderDto and returning it
@@ -61,16 +58,15 @@ public class OrderServiceImpl implements OrderService {
             orderDto.setStatus(orderEntity.isStatus());
 
             return orderDto;
-        }
-       catch (Exception e){
-            throw new NullPointerException();
-       }
+
     }
 
     @Override
-    public OrderDto updateOrderDetails(String orderId, OrderDto orderDto) throws Exception {
+    public OrderDto updateOrderDetails(String orderId, OrderDto orderDto) throws NullPointerException {
 
-        try {
+       if(orderRepository.findByOrderId(orderId) == null){
+           throw new NullPointerException();
+       }
             OrderEntity orderEntity = orderRepository.findByOrderId(orderId);
 
             orderEntity.setItems(orderDto.getItems());
@@ -85,23 +81,20 @@ public class OrderServiceImpl implements OrderService {
             orderDto.setUserId(orderEntity.getUserId());
 
             return orderDto;
-        }
-       catch (Exception e){
-            throw new NullPointerException();
-       }
+
     }
 
     @Override
-    public void deleteOrder(String orderId) throws Exception {
-        try {
+    public void deleteOrder(String orderId) throws NullPointerException {
+       if(orderRepository.findByOrderId(orderId) == null){
+           throw new NullPointerException();
+       }
             OrderEntity orderEntity = orderRepository.findByOrderId(orderId);
 
 
             orderRepository.delete(orderEntity);
-        }
-        catch (Exception e){
-            throw new NullPointerException();
-        }
+
+
     }
 
     @Override

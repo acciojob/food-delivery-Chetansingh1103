@@ -44,14 +44,14 @@ public class OrderController {
 			return orderDetailsResponse;
 		}
 		catch (Exception e){
-			throw new NullPointerException();
+			return new OrderDetailsResponse();
 		}
 	}
 	
 	@PostMapping("/createOrder")
 	public OrderDetailsResponse createOrder(@RequestBody OrderDetailsRequestModel orderDetailsRequestModel) {
-		try {
-			OrderDto orderDto = new OrderDto();
+
+		OrderDto orderDto = new OrderDto();
 			orderDto.setCost(orderDetailsRequestModel.getCost());
 			orderDto.setItems(orderDetailsRequestModel.getItems());
 			orderDto.setUserId(orderDetailsRequestModel.getUserId());
@@ -66,14 +66,10 @@ public class OrderController {
 			orderDetailsResponse.setUserId(orderDto.getUserId());
 
 			return orderDetailsResponse;
-		}
-		catch (Exception e){
-			throw new NullPointerException();
-		}
 	}
 		
 	@PutMapping(path="/{id}")
-	public OrderDetailsResponse updateOrder(@PathVariable String id, @RequestBody OrderDetailsRequestModel orderDetailsRequestModel) throws Exception{
+	public OrderDetailsResponse updateOrder(@PathVariable String id, @RequestBody OrderDetailsRequestModel orderDetailsRequestModel){
 
 		try {
 			OrderDto orderDto = new OrderDto();
@@ -93,14 +89,14 @@ public class OrderController {
 			return orderDetailsResponse;
 		}
 		catch (Exception e){
-			throw new NullPointerException();
+			return new OrderDetailsResponse();
 		}
 	}
 	
 	@DeleteMapping(path = "/{id}")
-	public OperationStatusModel deleteOrder(@PathVariable String id) throws Exception {
-		OperationStatusModel operationStatusModel = new OperationStatusModel();
+	public OperationStatusModel deleteOrder(@PathVariable String id){
 		try {
+			OperationStatusModel operationStatusModel = new OperationStatusModel();
 			orderService.getOrderById(id);
 			orderService.deleteOrder(id);
 			operationStatusModel.setOperationName(String.valueOf(RequestOperationName.DELETE));
@@ -108,9 +104,10 @@ public class OrderController {
 			return operationStatusModel;
 		}
 		catch (Exception e){
+			OperationStatusModel operationStatusModel = new OperationStatusModel();
 			operationStatusModel.setOperationName(String.valueOf(RequestOperationName.DELETE));
 			operationStatusModel.setOperationResult(String.valueOf(RequestOperationStatus.ERROR));
-			throw new NullPointerException();
+			return operationStatusModel;
 		}
 	}
 	
