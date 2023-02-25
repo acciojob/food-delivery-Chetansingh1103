@@ -32,7 +32,7 @@ public class UserController {
 			return userResponse;
 		}
 		catch (Exception e){
-			throw new Exception();
+			throw new NullPointerException();
 		}
 	}
 
@@ -56,7 +56,7 @@ public class UserController {
 			return userResponse;
 		}
 		catch (Exception e){
-			throw new Exception();
+			throw new NullPointerException();
 		}
 	}
 
@@ -82,7 +82,7 @@ public class UserController {
 			return userResponse;
 		}
 		catch (Exception e){
-			throw new Exception();
+			throw new NullPointerException();
 		}
 	}
 
@@ -101,7 +101,7 @@ public class UserController {
 		catch (Exception e){
 			operationStatusModel.setOperationName(String.valueOf(RequestOperationName.DELETE));
 			operationStatusModel.setOperationResult(String.valueOf(RequestOperationStatus.ERROR));
-			return operationStatusModel;
+			throw new NullPointerException();
 		}
 	}
 	

@@ -39,15 +39,10 @@ public class FoodServiceImpl implements FoodService {
 
     @Override
     public FoodDto getFoodById(String foodId) throws Exception {
-        if(Objects.equals(foodId, "")){
-            throw new Exception();
-        }
+
 
         FoodEntity foodEntity = foodRepository.findByFoodId(foodId);
 
-        if(foodEntity == null){
-            throw new Exception();
-        }
 
         FoodDto foodDto = new FoodDto();
         foodDto.setId(foodEntity.getId());
@@ -90,17 +85,15 @@ public class FoodServiceImpl implements FoodService {
 
     @Override
     public void deleteFoodItem(String foodId) throws Exception {
-        if(foodId.equals("")){
+        try {
+            FoodEntity foodEntity = foodRepository.findByFoodId(foodId);
+
+
+            foodRepository.delete(foodEntity);
+        }
+        catch (Exception e){
             throw new Exception();
         }
-
-        FoodEntity foodEntity = foodRepository.findByFoodId(foodId);
-
-        if(foodEntity == null){
-            throw new Exception();
-        }
-
-        foodRepository.delete(foodEntity);
     }
 
     @Override

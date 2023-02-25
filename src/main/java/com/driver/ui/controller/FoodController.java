@@ -41,7 +41,7 @@ public class FoodController {
 			return foodDetailsResponse;
 		}
 		catch (Exception e){
-			throw new Exception();
+			throw new NullPointerException();
 		}
 	}
 
@@ -90,7 +90,7 @@ public class FoodController {
 			return foodDetailsResponse;
 		}
 		catch (Exception e){
-			throw new Exception();
+			throw new NullPointerException();
 		}
 	}
 
@@ -108,7 +108,7 @@ public class FoodController {
 		catch (Exception e){
 			operationStatusModel.setOperationResult(String.valueOf(RequestOperationStatus.ERROR));
 			operationStatusModel.setOperationName(String.valueOf(RequestOperationName.DELETE));
-			return operationStatusModel;
+			throw new NullPointerException();
 		}
 	}
 	

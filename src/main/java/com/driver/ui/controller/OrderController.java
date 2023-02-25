@@ -44,27 +44,32 @@ public class OrderController {
 			return orderDetailsResponse;
 		}
 		catch (Exception e){
-			throw new Exception();
+			throw new NullPointerException();
 		}
 	}
 	
 	@PostMapping("/createOrder")
 	public OrderDetailsResponse createOrder(@RequestBody OrderDetailsRequestModel orderDetailsRequestModel) {
-		OrderDto orderDto = new OrderDto();
-		orderDto.setCost(orderDetailsRequestModel.getCost());
-		orderDto.setItems(orderDetailsRequestModel.getItems());
-		orderDto.setUserId(orderDetailsRequestModel.getUserId());
-		orderDto = orderService.createOrder(orderDto);
+		try {
+			OrderDto orderDto = new OrderDto();
+			orderDto.setCost(orderDetailsRequestModel.getCost());
+			orderDto.setItems(orderDetailsRequestModel.getItems());
+			orderDto.setUserId(orderDetailsRequestModel.getUserId());
+			orderDto = orderService.createOrder(orderDto);
 
-		// setting the values of response that will be returned back to the client
-		OrderDetailsResponse orderDetailsResponse = new OrderDetailsResponse();
-		orderDetailsResponse.setOrderId(orderDto.getOrderId());
-		orderDetailsResponse.setCost(orderDto.getCost());
-		orderDetailsResponse.setItems(orderDto.getItems());
-		orderDetailsResponse.setStatus(true);
-		orderDetailsResponse.setUserId(orderDto.getUserId());
+			// setting the values of response that will be returned back to the client
+			OrderDetailsResponse orderDetailsResponse = new OrderDetailsResponse();
+			orderDetailsResponse.setOrderId(orderDto.getOrderId());
+			orderDetailsResponse.setCost(orderDto.getCost());
+			orderDetailsResponse.setItems(orderDto.getItems());
+			orderDetailsResponse.setStatus(true);
+			orderDetailsResponse.setUserId(orderDto.getUserId());
 
-		return orderDetailsResponse;
+			return orderDetailsResponse;
+		}
+		catch (Exception e){
+			throw new NullPointerException();
+		}
 	}
 		
 	@PutMapping(path="/{id}")
@@ -88,7 +93,7 @@ public class OrderController {
 			return orderDetailsResponse;
 		}
 		catch (Exception e){
-			throw new Exception();
+			throw new NullPointerException();
 		}
 	}
 	
@@ -105,7 +110,7 @@ public class OrderController {
 		catch (Exception e){
 			operationStatusModel.setOperationName(String.valueOf(RequestOperationName.DELETE));
 			operationStatusModel.setOperationResult(String.valueOf(RequestOperationStatus.ERROR));
-			return operationStatusModel;
+			throw new NullPointerException();
 		}
 	}
 	
