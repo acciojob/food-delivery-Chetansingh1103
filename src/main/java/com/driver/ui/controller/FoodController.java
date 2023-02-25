@@ -29,51 +29,69 @@ public class FoodController {
 
 	@GetMapping(path="/{id}")
 	public FoodDetailsResponse getFood(@PathVariable String id) throws Exception{
-		FoodDto foodDto = foodService.getFoodById(id);
+		try {
+			FoodDto foodDto = foodService.getFoodById(id);
 
-		FoodDetailsResponse foodDetailsResponse = new FoodDetailsResponse();
-		foodDetailsResponse.setFoodId(foodDto.getFoodId());
-		foodDetailsResponse.setFoodName(foodDto.getFoodName());
-		foodDetailsResponse.setFoodCategory(foodDto.getFoodCategory());
-		foodDetailsResponse.setFoodPrice(foodDto.getFoodPrice());
+			FoodDetailsResponse foodDetailsResponse = new FoodDetailsResponse();
+			foodDetailsResponse.setFoodId(foodDto.getFoodId());
+			foodDetailsResponse.setFoodName(foodDto.getFoodName());
+			foodDetailsResponse.setFoodCategory(foodDto.getFoodCategory());
+			foodDetailsResponse.setFoodPrice(foodDto.getFoodPrice());
 
-		return foodDetailsResponse;
+			return foodDetailsResponse;
+		}
+		catch (Exception e){
+			throw new Exception();
+		}
 	}
 
 	@PostMapping("/createFood")
 	public FoodDetailsResponse createFood(@RequestBody FoodDetailsRequestModel foodDetails) {
-		FoodDto foodDto = new FoodDto();
-		foodDto.setFoodName(foodDetails.getFoodName());
-		foodDto.setFoodPrice(foodDetails.getFoodPrice());
-		foodDto.setFoodCategory(foodDetails.getFoodCategory());
 
-		foodDto = foodService.createFood(foodDto);
+		try {
+			FoodDto foodDto = new FoodDto();
+			foodDto.setFoodName(foodDetails.getFoodName());
+			foodDto.setFoodPrice(foodDetails.getFoodPrice());
+			foodDto.setFoodCategory(foodDetails.getFoodCategory());
 
-		FoodDetailsResponse foodDetailsResponse = new FoodDetailsResponse();
-		foodDetailsResponse.setFoodId(foodDto.getFoodId());
-		foodDetailsResponse.setFoodName(foodDto.getFoodName());
-		foodDetailsResponse.setFoodCategory(foodDto.getFoodCategory());
-		foodDetailsResponse.setFoodPrice(foodDto.getFoodPrice());
+			foodDto = foodService.createFood(foodDto);
 
-		return foodDetailsResponse;
+			FoodDetailsResponse foodDetailsResponse = new FoodDetailsResponse();
+			foodDetailsResponse.setFoodId(foodDto.getFoodId());
+			foodDetailsResponse.setFoodName(foodDto.getFoodName());
+			foodDetailsResponse.setFoodCategory(foodDto.getFoodCategory());
+			foodDetailsResponse.setFoodPrice(foodDto.getFoodPrice());
+
+			return foodDetailsResponse;
+		}
+		catch (Exception e){
+			throw new RuntimeException();
+		}
+
 	}
 
 	@PutMapping(path="/{id}")
 	public FoodDetailsResponse updateFood(@PathVariable String id, @RequestBody FoodDetailsRequestModel foodDetails) throws Exception{
-		FoodDto foodDto = new FoodDto();
-		foodDto.setFoodName(foodDetails.getFoodName());
-		foodDto.setFoodPrice(foodDetails.getFoodPrice());
-		foodDto.setFoodCategory(foodDetails.getFoodCategory());
 
-		foodDto = foodService.updateFoodDetails(id,foodDto);
+		try {
+			FoodDto foodDto = new FoodDto();
+			foodDto.setFoodName(foodDetails.getFoodName());
+			foodDto.setFoodPrice(foodDetails.getFoodPrice());
+			foodDto.setFoodCategory(foodDetails.getFoodCategory());
 
-		FoodDetailsResponse foodDetailsResponse = new FoodDetailsResponse();
-		foodDetailsResponse.setFoodId(foodDto.getFoodId());
-		foodDetailsResponse.setFoodName(foodDto.getFoodName());
-		foodDetailsResponse.setFoodCategory(foodDto.getFoodCategory());
-		foodDetailsResponse.setFoodPrice(foodDto.getFoodPrice());
+			foodDto = foodService.updateFoodDetails(id,foodDto);
 
-		return foodDetailsResponse;
+			FoodDetailsResponse foodDetailsResponse = new FoodDetailsResponse();
+			foodDetailsResponse.setFoodId(foodDto.getFoodId());
+			foodDetailsResponse.setFoodName(foodDto.getFoodName());
+			foodDetailsResponse.setFoodCategory(foodDto.getFoodCategory());
+			foodDetailsResponse.setFoodPrice(foodDto.getFoodPrice());
+
+			return foodDetailsResponse;
+		}
+		catch (Exception e){
+			throw new Exception();
+		}
 	}
 
 	@DeleteMapping(path = "/{id}")
@@ -81,18 +99,17 @@ public class FoodController {
 		OperationStatusModel operationStatusModel = new OperationStatusModel();
 		try {
 			foodService.getFoodById(id);
+			foodService.deleteFoodItem(id);
+			operationStatusModel.setOperationResult(String.valueOf(RequestOperationStatus.SUCCESS));
+			operationStatusModel.setOperationName(String.valueOf(RequestOperationName.DELETE));
+
+			return operationStatusModel;
 		}
 		catch (Exception e){
 			operationStatusModel.setOperationResult(String.valueOf(RequestOperationStatus.ERROR));
 			operationStatusModel.setOperationName(String.valueOf(RequestOperationName.DELETE));
 			return operationStatusModel;
 		}
-
-		foodService.deleteFoodItem(id);
-		operationStatusModel.setOperationResult(String.valueOf(RequestOperationStatus.SUCCESS));
-		operationStatusModel.setOperationName(String.valueOf(RequestOperationName.DELETE));
-
-		return operationStatusModel;
 	}
 	
 	@GetMapping("/getAllFood")

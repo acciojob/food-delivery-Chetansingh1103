@@ -31,13 +31,21 @@ public class OrderController {
 
 	@GetMapping(path="/{id}")
 	public OrderDetailsResponse getOrder(@PathVariable String id) throws Exception{
+		try {
+			OrderDto orderDto = orderService.getOrderById(id);
+			OrderDetailsResponse orderDetailsResponse = new OrderDetailsResponse();
 
-		OrderDto orderDto = orderService.getOrderById(id);
-		OrderDetailsResponse orderDetailsResponse = new OrderDetailsResponse();
+			orderDetailsResponse.setOrderId(orderDto.getOrderId());
+			orderDetailsResponse.setCost(orderDto.getCost());
+			orderDetailsResponse.setItems(orderDto.getItems());
+			orderDetailsResponse.setStatus(true);
+			orderDetailsResponse.setUserId(orderDto.getUserId());
 
-		BeanUtils.copyProperties(orderDto,orderDetailsResponse);
-
-		return orderDetailsResponse;
+			return orderDetailsResponse;
+		}
+		catch (Exception e){
+			throw new Exception();
+		}
 	}
 	
 	@PostMapping("/createOrder")
@@ -62,42 +70,43 @@ public class OrderController {
 	@PutMapping(path="/{id}")
 	public OrderDetailsResponse updateOrder(@PathVariable String id, @RequestBody OrderDetailsRequestModel orderDetailsRequestModel) throws Exception{
 
-		OrderDto orderDto = new OrderDto();
-		orderDto.setCost(orderDetailsRequestModel.getCost());
-		orderDto.setItems(orderDetailsRequestModel.getItems());
-		orderDto.setUserId(orderDetailsRequestModel.getUserId());
+		try {
+			OrderDto orderDto = new OrderDto();
+			orderDto.setCost(orderDetailsRequestModel.getCost());
+			orderDto.setItems(orderDetailsRequestModel.getItems());
+			orderDto.setUserId(orderDetailsRequestModel.getUserId());
 
-		orderDto = orderService.updateOrderDetails(id,orderDto);
+			orderDto = orderService.updateOrderDetails(id,orderDto);
 
-		OrderDetailsResponse orderDetailsResponse = new OrderDetailsResponse();
-		orderDetailsResponse.setOrderId(orderDto.getOrderId());
-		orderDetailsResponse.setCost(orderDto.getCost());
-		orderDetailsResponse.setItems(orderDto.getItems());
-		orderDetailsResponse.setStatus(true);
-		orderDetailsResponse.setUserId(orderDto.getUserId());
+			OrderDetailsResponse orderDetailsResponse = new OrderDetailsResponse();
+			orderDetailsResponse.setOrderId(orderDto.getOrderId());
+			orderDetailsResponse.setCost(orderDto.getCost());
+			orderDetailsResponse.setItems(orderDto.getItems());
+			orderDetailsResponse.setStatus(true);
+			orderDetailsResponse.setUserId(orderDto.getUserId());
 
-		return orderDetailsResponse;
+			return orderDetailsResponse;
+		}
+		catch (Exception e){
+			throw new Exception();
+		}
 	}
 	
 	@DeleteMapping(path = "/{id}")
 	public OperationStatusModel deleteOrder(@PathVariable String id) throws Exception {
 		OperationStatusModel operationStatusModel = new OperationStatusModel();
-
 		try {
 			orderService.getOrderById(id);
+			orderService.deleteOrder(id);
+			operationStatusModel.setOperationName(String.valueOf(RequestOperationName.DELETE));
+			operationStatusModel.setOperationResult(String.valueOf(RequestOperationStatus.SUCCESS));
+			return operationStatusModel;
 		}
 		catch (Exception e){
 			operationStatusModel.setOperationName(String.valueOf(RequestOperationName.DELETE));
 			operationStatusModel.setOperationResult(String.valueOf(RequestOperationStatus.ERROR));
 			return operationStatusModel;
 		}
-
-		// if there is no exception then delete the order
-		orderService.deleteOrder(id);
-		operationStatusModel.setOperationName(String.valueOf(RequestOperationName.DELETE));
-		operationStatusModel.setOperationResult(String.valueOf(RequestOperationStatus.SUCCESS));
-
-		return operationStatusModel;
 	}
 	
 	@GetMapping("/getAllOrders")
