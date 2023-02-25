@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto getUserByUserId(String userId) throws Exception {
+    public UserDto getUserById(String userId) throws Exception {
 
         if(userId.equals("")){
             throw new Exception();

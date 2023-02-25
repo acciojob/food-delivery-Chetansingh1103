@@ -22,7 +22,7 @@ public class UserController {
 
 	@GetMapping("/getUser")
 	public UserResponse getUser(@RequestParam("userId") String userid) throws Exception{
-			UserDto userDto = userService.getUserByUserId(userid);
+			UserDto userDto = userService.getUserById(userid);
 			UserResponse userResponse = new UserResponse();
 			userResponse.setUserId(userDto.getUserId());
 			userResponse.setEmail(userDto.getEmail());
@@ -76,7 +76,7 @@ public class UserController {
 		OperationStatusModel operationStatusModel = new OperationStatusModel();
 
 		try {
-			userService.getUserByUserId(id);
+			userService.getUserById(id);
 		}
 		catch (Exception e){
 			operationStatusModel.setOperationName(String.valueOf(RequestOperationName.DELETE));
