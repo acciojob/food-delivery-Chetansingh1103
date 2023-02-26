@@ -36,9 +36,7 @@ public class FoodServiceImpl implements FoodService {
     @Override
     public FoodDto getFoodById(String foodId) throws NullPointerException {
 
-        if(foodRepository.findByFoodId(foodId) == null){
-            throw new NullPointerException();
-        }
+
             FoodEntity foodEntity = foodRepository.findByFoodId(foodId);
 
 
@@ -57,9 +55,7 @@ public class FoodServiceImpl implements FoodService {
     @Override
     public FoodDto updateFoodDetails(String foodId, FoodDto foodDetails) throws NullPointerException {
 
-        if(foodRepository.findByFoodId(foodId) == null){
-            throw new NullPointerException();
-        }
+
             FoodEntity foodEntity = foodRepository.findByFoodId(foodId);
 
             foodEntity.setFoodPrice(foodDetails.getFoodPrice());
@@ -82,9 +78,7 @@ public class FoodServiceImpl implements FoodService {
 
     @Override
     public void deleteFoodItem(String foodId) throws NullPointerException {
-        if(foodRepository.findByFoodId(foodId) == null){
-            throw new NullPointerException();
-        }
+
             FoodEntity foodEntity = foodRepository.findByFoodId(foodId);
 
 

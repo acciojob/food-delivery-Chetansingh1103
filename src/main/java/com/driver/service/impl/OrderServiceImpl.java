@@ -43,9 +43,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDto getOrderById(String orderId) throws NullPointerException {
 
-        if(orderRepository.findByOrderId(orderId) == null){
-            throw new NullPointerException();
-        }
+
             OrderEntity orderEntity = orderRepository.findByOrderId(orderId);
 
             // putting the values of order into orderDto and returning it
@@ -64,9 +62,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDto updateOrderDetails(String orderId, OrderDto orderDto) throws NullPointerException {
 
-       if(orderRepository.findByOrderId(orderId) == null){
-           throw new NullPointerException();
-       }
+
             OrderEntity orderEntity = orderRepository.findByOrderId(orderId);
 
             orderEntity.setItems(orderDto.getItems());

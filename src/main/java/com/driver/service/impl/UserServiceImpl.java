@@ -33,9 +33,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto getUser(String email) throws NullPointerException {
 
-        if(userRepository.findByEmail(email) == null){
-            throw new NullPointerException();
-        }
             UserEntity userEntity = userRepository.findByEmail(email);
 
             UserDto userDto = new UserDto();
@@ -53,9 +50,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto getUserByUserId(String userId) throws Exception {
 
-        if(userRepository.findByUserId(userId) == null){
-            throw new NullPointerException();
-        }
+
            UserEntity userEntity = userRepository.findByUserId(userId);
 
            // setting the userDto values to return it
@@ -73,9 +68,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto updateUser(String userId, UserDto userDto) throws Exception {
 
-        if(userRepository.findByUserId(userId) == null){
-            throw new NullPointerException();
-        }
+
             UserEntity userEntity = userRepository.findByUserId(userId);
 
 
@@ -97,11 +90,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUser(String userId) throws Exception {
+    public void deleteUser(String userId) throws NullPointerException {
 
-        if(userRepository.findByUserId(userId) == null){
-            throw new NullPointerException();
-        }
 
             UserEntity userEntity = userRepository.findByUserId(userId);
 
