@@ -68,14 +68,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto updateUser(String userId, UserDto userDto) throws Exception {
 
-        if(userId == null || userId .equals("")){
+        if(userRepository.isUserIdPresent(userId)){
             throw new NullPointerException();
         }
             UserEntity userEntity = userRepository.findByUserId(userId);
 
-        if(userEntity == null){
-            throw new NullPointerException();
-        }
 
             userEntity.setFirstName(userDto.getFirstName());
             userEntity.setLastName(userDto.getLastName());
