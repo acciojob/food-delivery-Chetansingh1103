@@ -78,7 +78,6 @@ public class FoodServiceImpl implements FoodService {
 
     @Override
     public void deleteFoodItem(String foodId) throws NullPointerException {
-
             FoodEntity foodEntity = foodRepository.findByFoodId(foodId);
 
 
