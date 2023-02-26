@@ -68,29 +68,30 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto updateUser(String userId, UserDto userDto) throws Exception {
 
-        for(UserEntity userEntity : userRepository.findAll()){
-            if(userEntity.getUserId().equals(userId)){
+        if(userId == null || userId .equals("")){
+            throw new NullPointerException();
+        }
+            UserEntity userEntity = userRepository.findByUserId(userId);
 
-                userEntity = userRepository.findByUserId(userId);
-
-                userEntity.setFirstName(userDto.getFirstName());
-                userEntity.setLastName(userDto.getLastName());
-                userEntity.setEmail(userDto.getEmail());
-
-                userRepository.save(userEntity);
-
-                // setting the userDto values again to return it
-                userDto.setId(userEntity.getId());
-                userDto.setEmail(userEntity.getEmail());
-                userDto.setLastName(userEntity.getLastName());
-                userDto.setFirstName(userEntity.getFirstName());
-                userDto.setUserId(userEntity.getUserId());
-
-                return userDto;
-            }
+        if(userEntity == null){
+            throw new NullPointerException();
         }
 
-        throw new NullPointerException();
+            userEntity.setFirstName(userDto.getFirstName());
+            userEntity.setLastName(userDto.getLastName());
+            userEntity.setEmail(userDto.getEmail());
+
+            userRepository.save(userEntity);
+
+            // setting the userDto values again to return it
+            userDto.setId(userEntity.getId());
+            userDto.setEmail(userEntity.getEmail());
+            userDto.setLastName(userEntity.getLastName());
+            userDto.setFirstName(userEntity.getFirstName());
+            userDto.setUserId(userEntity.getUserId());
+
+            return userDto;
+
     }
 
     @Override
