@@ -71,6 +71,8 @@ public class UserServiceImpl implements UserService {
         for(UserEntity userEntity : userRepository.findAll()){
             if(userEntity.getUserId().equals(userId)){
 
+                userEntity = userRepository.findByUserId(userId);
+
                 userEntity.setFirstName(userDto.getFirstName());
                 userEntity.setLastName(userDto.getLastName());
                 userEntity.setEmail(userDto.getEmail());
